@@ -1,0 +1,11 @@
+obj
+Obj
+bin
+Bin
+bin/*
+Bin/*
+*.csproj.user
+*.suo
+*.cache
+*.Cache
+Thumbs.db
