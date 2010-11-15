@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace Bandage
 {
@@ -64,6 +65,21 @@ namespace Bandage
                 result = Wrap(method.Invoke(wrapped, args));
                 return true;
             }  
+        }
+
+        public override bool TryConvert(ConvertBinder binder, out object result)
+        {
+            if (binder.Type == typeof(IEnumerable))
+            {
+                var items = wrapped as IEnumerable;
+                result = items.Cast<object>().Select(i => Wrap(i));
+            }
+            else
+            {
+                var site = CallSite<Func<CallSite, object, object>>.Create(binder);
+                result = site.Target(site, wrapped);
+            }
+            return true;
         }
 
         public override string ToString()

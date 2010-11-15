@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BandageViewModel.cs" />
+    <Compile Include="DynamicViewModel.cs" />
     <Compile Include="DynamicProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wrapper.cs" />

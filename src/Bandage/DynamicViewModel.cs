@@ -6,7 +6,7 @@ using System.Dynamic;
 
 namespace Bandage
 {
-    public class BandageViewModel : DynamicObject
+    public class DynamicViewModel : DynamicObject
     {
         readonly IDictionary<string, object> store = new ExpandoObject();
         readonly IDictionary<Tuple<Type, string>, DynamicProperty> properties = new Dictionary<Tuple<Type, string>, DynamicProperty>();

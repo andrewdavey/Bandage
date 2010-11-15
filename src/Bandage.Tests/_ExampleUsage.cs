@@ -11,7 +11,7 @@ namespace Bandage
         [Fact]
         public void Can_add_dynamic_property_to_viewmodel_child()
         {
-            dynamic viewmodel = new BandageViewModel();
+            dynamic viewmodel = new DynamicViewModel();
             viewmodel.Customer = new Customer { Id = 1 };
             viewmodel.Add(DynamicProperty.For<Customer>("Url", c => "/customer/" + c.Id));
 

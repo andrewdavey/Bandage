@@ -2,12 +2,12 @@
 
 namespace Bandage
 {
-    public class BandageViewModelTests
+    public class DynamicViewModelTests
     {
         [Fact]
         public void Can_set_property()
         {
-            dynamic viewmodel = new BandageViewModel();
+            dynamic viewmodel = new DynamicViewModel();
             viewmodel.Test = 1;
             Assert.Equal(1, (viewmodel.Test as Wrapper).Value);
         }

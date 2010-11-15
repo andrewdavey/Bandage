@@ -46,7 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BandageViewModelTests.cs" />
+    <Compile Include="DynamicViewModelTests.cs" />
     <Compile Include="DynamicPropertyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WrapperTests.cs" />
