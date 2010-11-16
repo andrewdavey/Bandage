@@ -82,6 +82,17 @@ namespace Bandage
             return true;
         }
 
+        public override bool TryBinaryOperation(BinaryOperationBinder binder, object arg, out object result)
+        {
+            var funcType = typeof(Func<,,,>).MakeGenericType(typeof(CallSite), wrapped.GetType(), arg.GetType(), binder.ReturnType);
+            dynamic site = typeof(CallSite<>).MakeGenericType(funcType)
+                .GetMethod("Create", BindingFlags.Static | BindingFlags.Public)
+                .Invoke(null, new[] { binder });
+
+            result = site.Target(site, (dynamic)wrapped, (dynamic)arg);
+            return true;
+        }
+
         public override string ToString()
         {
             return wrapped.ToString();
