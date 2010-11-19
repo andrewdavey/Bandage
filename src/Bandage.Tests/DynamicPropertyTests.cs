@@ -18,9 +18,9 @@ namespace Bandage
         }
 
         [Fact]
-        public void Getter_Returns_value()
+        public void GetValue_Returns_value()
         {
-            Assert.Equal("value", property.Getter(new SomeClass()));
+            Assert.Equal("value", property.GetValue(new SomeClass()));
         }
 
         [Fact]

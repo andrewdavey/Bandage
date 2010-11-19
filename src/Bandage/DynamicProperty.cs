@@ -1,24 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Bandage
 {
     public class DynamicProperty
     {
+        /// <remarks>Must use the DynamicProperty.For factory method.</remarks>
+        private DynamicProperty() { }
+
         public static DynamicProperty For<T>(string propertyName, Func<T, object> getter)
         {
             return new DynamicProperty
             {
+                ForType = typeof(T),
                 Name = propertyName,
-                Getter = x => getter((T)x),
-                ForType = typeof(T)
+                getter = x => getter((T)x)
             };
         }
 
-        public string Name { get; private set; }
-        public Func<object, object> Getter { get; private set; }
+        Func<object, object> getter;
+
         public Type ForType { get; private set; }
+        public string Name { get; private set; }
+
+        public object GetValue(object obj)
+        {
+            return getter(obj);
+        }
     }
 }

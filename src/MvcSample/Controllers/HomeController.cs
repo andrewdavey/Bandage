@@ -17,9 +17,11 @@ namespace MvcSample.Controllers
                 "Url", 
                 c => Url.Action("Details", new { c.Id }))
             );
-            // BTW: Extension methods don't work well for this when 
-            // dynamic objects are used in the view
             
+            // BTW: Trying to do something like this using extension methods,
+            // instead of Bandage, will not work. You cannot call an extension
+            // method on a dynamic object.
+
             return View(model);
         }
 

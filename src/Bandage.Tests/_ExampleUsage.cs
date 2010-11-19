@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xunit;
+﻿using Xunit;
 
 namespace Bandage
 {
     public class _ExampleUsage
     {
         [Fact]
-        public void Can_add_dynamic_property_to_viewmodel_child()
+        public void Can_add_dynamic_property_to_object_in_viewmodel()
         {
             dynamic viewmodel = new DynamicViewModel();
             viewmodel.Customer = new Customer { Id = 1 };

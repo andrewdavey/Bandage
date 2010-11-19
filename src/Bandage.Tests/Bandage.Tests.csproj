@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DynamicPropertyProviderTests.cs" />
     <Compile Include="DynamicViewModelTests.cs" />
     <Compile Include="DynamicPropertyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

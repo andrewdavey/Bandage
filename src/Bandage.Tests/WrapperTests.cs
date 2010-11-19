@@ -6,7 +6,7 @@ namespace Bandage
 {
     public class WrapperTests
     {
-        Dictionary<Tuple<Type, string>, DynamicProperty> properties = new Dictionary<Tuple<Type, string>, DynamicProperty>();
+        DynamicPropertyProvider properties = new DynamicPropertyProvider();
 
         [Fact]
         public void Can_get_property()

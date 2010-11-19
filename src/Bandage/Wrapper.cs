@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
@@ -10,7 +9,7 @@ namespace Bandage
 {
     public static class Wrapper
     {
-        public static IWrapper Create(object value, IDictionary<Tuple<Type, string>, DynamicProperty> properties)
+        public static IWrapper Create(object value, DynamicPropertyProvider properties)
         {
             if (object.ReferenceEquals(null, value)) return null;
 
@@ -36,13 +35,13 @@ namespace Bandage
 
     public class Wrapper<T> : DynamicObject, IWrapper
     {
-        public Wrapper(T value, Dictionary<Tuple<Type, string>, DynamicProperty> properties)
+        public Wrapper(T value, DynamicPropertyProvider properties)
         {
             Value = value;
             this.properties = properties;
         }
 
-        Dictionary<Tuple<Type, string>, DynamicProperty> properties;
+        DynamicPropertyProvider properties;
 
         public T Value { get; set; }
 
@@ -60,40 +59,45 @@ namespace Bandage
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             var key = Tuple.Create(Value.GetType(), binder.Name);
-            if (properties.ContainsKey(key))
+            DynamicProperty property;
+            if (properties.TryGetProperty(Value.GetType(), binder.Name, out property))
             {
-                result = Wrapper.Create(properties[key].Getter(Value), properties);
+                result = property.GetValue(Value);
             }
             else
             {
                 // TODO: Probably need to cache this callsite somehow
                 // I'm guessing it's expensive to create each time (?)
                 var site = CallSite<Func<CallSite, object, object>>.Create(binder);
-                result = Wrapper.Create(site.Target(site, Value), properties);
+                result = Wrap(site.Target(site, Value));
             }
             return true;
         }
         public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
         {
             var site = CallSite<Func<CallSite, object, int, object>>.Create(binder);
-            result = Wrapper.Create(site.Target(site, Value, (int)indexes[0]), properties);
+            result = Wrap(site.Target(site, Value, (int)indexes[0]));
 
             return true;
         }
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            var types = from a in args
-                        select a.GetType();
+            var types = (from a in args select a.GetType()).ToArray();
 
-            var method = Value.GetType().GetMethod
-                (binder.Name, BindingFlags.Public | BindingFlags.Instance, null, types.ToArray(), null);
+            var method = Value.GetType().GetMethod(
+                binder.Name, 
+                BindingFlags.Public | BindingFlags.Instance, 
+                null,
+                types,
+                null
+            );
 
             if (method == null)
                 return base.TryInvokeMember(binder, args, out result);
             else
             {
-                result = Wrapper.Create(method.Invoke(Value, args), properties);
+                result = Wrap(method.Invoke(Value, args));
                 return true;
             }
         }
@@ -103,7 +107,7 @@ namespace Bandage
             if (binder.Type == typeof(IEnumerable))
             {
                 var items = Value as IEnumerable;
-                result = items.Cast<object>().Select(i => Wrapper.Create(i, properties));
+                result = items.Cast<object>().Select(i => Wrap(i));
             }
             else
             {
@@ -124,6 +128,9 @@ namespace Bandage
             return true;
         }
 
-        
+        object Wrap(object obj)
+        {
+            return Wrapper.Create(obj, properties);
+        }
     }
 }

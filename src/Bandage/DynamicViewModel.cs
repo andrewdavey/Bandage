@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Dynamic;
 
 namespace Bandage
@@ -9,7 +6,7 @@ namespace Bandage
     public class DynamicViewModel : DynamicObject
     {
         readonly IDictionary<string, object> store = new ExpandoObject();
-        readonly IDictionary<Tuple<Type, string>, DynamicProperty> properties = new Dictionary<Tuple<Type, string>, DynamicProperty>();
+        readonly DynamicPropertyProvider properties = new DynamicPropertyProvider();
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
@@ -36,7 +33,7 @@ namespace Bandage
 
         public void Add(DynamicProperty dynamicProperty)
         {
-            properties[Tuple.Create(dynamicProperty.ForType, dynamicProperty.Name)] = dynamicProperty;
+            properties.Add(dynamicProperty);
         }
     }
 }
