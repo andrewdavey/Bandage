@@ -73,6 +73,7 @@ namespace Bandage
             }
             return true;
         }
+
         public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
         {
             var site = CallSite<Func<CallSite, object, int, object>>.Create(binder);
@@ -83,6 +84,8 @@ namespace Bandage
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
+            // TODO: Maybe add DynamicMethod to Bandage as well?!
+
             var types = (from a in args select a.GetType()).ToArray();
 
             var method = Value.GetType().GetMethod(
@@ -94,7 +97,9 @@ namespace Bandage
             );
 
             if (method == null)
+            {
                 return base.TryInvokeMember(binder, args, out result);
+            }
             else
             {
                 result = Wrap(method.Invoke(Value, args));
@@ -128,7 +133,7 @@ namespace Bandage
             return true;
         }
 
-        object Wrap(object obj)
+        IWrapper Wrap(object obj)
         {
             return Wrapper.Create(obj, properties);
         }
