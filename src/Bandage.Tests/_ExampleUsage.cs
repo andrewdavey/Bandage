@@ -15,7 +15,7 @@ namespace Bandage
             viewmodel.Customer = new Customer { Id = 1 };
             viewmodel.Add(DynamicProperty.For<Customer>("Url", c => "/customer/" + c.Id));
 
-            Assert.Equal("/customer/1", (viewmodel.Customer.Url as Wrapper).Value);
+            Assert.Equal("/customer/1", viewmodel.Customer.Url);
         }
 
         class Customer

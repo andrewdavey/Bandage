@@ -9,7 +9,7 @@ namespace Bandage
         {
             dynamic viewmodel = new DynamicViewModel();
             viewmodel.Test = 1;
-            Assert.Equal(1, (viewmodel.Test as Wrapper).Value);
+            Assert.Equal(1, viewmodel.Test);
         }
     }
 }

@@ -21,9 +21,9 @@ namespace Bandage
         {
             if (store.TryGetValue(binder.Name, out result))
             {
-                if (!(result is Wrapper))
+                if (!(result is IWrapper))
                 {
-                    result = new Wrapper(result, properties);
+                    result = Wrapper.Create(result, properties);
                 }
                 return true;
             }
