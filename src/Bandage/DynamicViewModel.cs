@@ -1,39 +1,55 @@
-﻿using System.Collections.Generic;
-using System.Dynamic;
+﻿using System.Dynamic;
+using System.Web.Mvc;
 
 namespace Bandage
 {
     public class DynamicViewModel : DynamicObject
     {
-        readonly IDictionary<string, object> store = new ExpandoObject();
-        readonly DynamicPropertyProvider properties = new DynamicPropertyProvider();
+        public DynamicViewModel()
+        {
+            viewData = new ViewDataDictionary();
+        }
+
+        public DynamicViewModel(ViewDataDictionary viewData)
+        {
+            this.viewData = viewData;
+        }
+
+        readonly ViewDataDictionary viewData;
+        readonly DynamicPropertyProvider dynamicProperties = new DynamicPropertyProvider();
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            store[binder.Name] = value;
+            if (!(value is IWrapper)) 
+                value = Wrapper.Create(value, dynamicProperties);
+
+            viewData[binder.Name] = value;
             return true;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            if (store.TryGetValue(binder.Name, out result))
+            if (viewData.TryGetValue(binder.Name, out result))
             {
                 if (!(result is IWrapper))
                 {
-                    result = Wrapper.Create(result, properties);
+                    result = Wrapper.Create(result, dynamicProperties);
                 }
                 return true;
             }
-            else
-            {
-                result = null;
-                return false;
-            }
+
+            result = null;
+            return false;
         }
 
         public void Add(DynamicProperty dynamicProperty)
         {
-            properties.Add(dynamicProperty);
+            dynamicProperties.Add(dynamicProperty);
+        }
+
+        public static implicit operator ViewDataDictionary(DynamicViewModel dvm)
+        {
+            return dvm.viewData;
         }
     }
 }

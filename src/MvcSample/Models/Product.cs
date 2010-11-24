@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace MvcSample.Models
+﻿namespace MvcSample.Models
 {
     public class Product
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
+        // Sample data
         public static Product[] LoadAll()
         {
             return new[] {

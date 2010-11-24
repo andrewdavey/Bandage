@@ -9,3 +9,5 @@ Bin/*
 *.cache
 *.Cache
 Thumbs.db
+_ReSharper*
+*.user
