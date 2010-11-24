@@ -5,17 +5,17 @@ using System.Web;
 
 namespace MvcSample.Models
 {
-    public class Customer
+    public class Product
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public static Customer[] LoadAll()
+        public static Product[] LoadAll()
         {
             return new[] {
-                new Customer { Id = 1, Name = "Customer 1" },
-                new Customer { Id = 2, Name = "Customer 2" },
-                new Customer { Id = 3, Name = "Customer 3" }
+                new Product { Id = 1, Name = "MacBook Pro" },
+                new Product { Id = 2, Name = "Plasma TV" },
+                new Product { Id = 3, Name = "Office Chair" }
             };
         }
     }

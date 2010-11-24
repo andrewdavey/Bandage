@@ -21,6 +21,10 @@ namespace MvcSample
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute("Product",
+                "product/{id}/{slug}",
+                new { controller = "Home", action="Details" }
+            );
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters

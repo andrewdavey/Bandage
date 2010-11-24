@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using Bandage;
 using MvcSample.Models;
 
@@ -9,13 +10,13 @@ namespace MvcSample.Controllers
         public ActionResult Index()
         {
             dynamic model = new DynamicViewModel();
-            model.Customers = Customer.LoadAll();
-
+            model.Products = Product.LoadAll();
+            
             // In addition to the regular Customer properties,
             // we want to have a "Url" property as well.
-            model.Add(DynamicProperty.For<Customer>(
+            model.Add(DynamicProperty.For<Product>(
                 "Url", 
-                c => Url.Action("Details", new { c.Id }))
+                p => Url.RouteUrl("Product", new { p.Id, slug = Util.GetSlug(p.Name) }))
             );
             
             // BTW: Trying to do something like this using extension methods,
@@ -27,7 +28,8 @@ namespace MvcSample.Controllers
 
         public ActionResult Details(int id)
         {
-            return Content("Customer " + id);
+            var product = Product.LoadAll().First(p => p.Id == id);
+            return Content("Info about " + product.Name);
         }
     }
 

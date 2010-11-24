@@ -1,15 +1,15 @@
 ﻿@model dynamic
 @{
-    View.Title = "Customers";
+    View.Title = "Products";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Customers</h1>
+<h1>Products</h1>
 <ul>
-@foreach (var customer in Model.Customers)
+@foreach (var product in Model.Products)
 {
     // Note how we can use the customer "Url" property here.
     // It's provided by Bandage's magic.
-    <li><a href="@customer.Url">@customer.Name</a></li>
+    <li><a href="@product.Url">@product.Name</a></li>
 }
 </ul>
